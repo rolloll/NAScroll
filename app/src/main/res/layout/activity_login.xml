@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="28dp">
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="@string/app_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/errorBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel2"
+            android:textColor="@color/danger"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:text="" />
+
+        <EditText
+            android:id="@+id/fBaseUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="NAS 주소 (예: https://synology.me)"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_muted"
+            android:backgroundTint="@color/border"
+            android:inputType="textUri"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:id="@+id/fAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="NAS 계정"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_muted"
+            android:backgroundTint="@color/border"
+            android:inputType="text"
+            android:layout_marginBottom="10dp" />
+
+        <EditText
+            android:id="@+id/fPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="비밀번호"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_muted"
+            android:backgroundTint="@color/border"
+            android:inputType="textPassword"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="로그인"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/accent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/text_muted"
+            android:textSize="12sp"
+            android:lineSpacingExtra="4dp"
+            android:text="이 앱은 시놀로지 NAS의 File Station API에 직접 연결합니다. 로그인하면 NAS 안의 모든 공유 폴더 목록부터 볼 수 있어요." />
+
+    </LinearLayout>
+</ScrollView>

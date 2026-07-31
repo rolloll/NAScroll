@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NasViewer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/panel</item>
+        <item name="colorAccent">@color/accent2</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/panel</item>
+        <item name="android:navigationBarColor">@color/panel</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+    </style>
+
+    <style name="Theme.NasViewer.Reader">
+        <item name="android:windowBackground">@color/reader_bg</item>
+        <item name="android:statusBarColor">@color/reader_bg</item>
+        <item name="android:navigationBarColor">@color/reader_bg</item>
+    </style>
+</resources>

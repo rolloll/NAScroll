@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.feelyeon.nasviewer.ZoomableImageView
+        android:id="@+id/pageImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:background="@color/panel"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/pageStatus"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="center"
+        android:textColor="@color/text_muted"
+        android:textSize="12sp"
+        android:background="@color/panel" />
+
+</FrameLayout>
