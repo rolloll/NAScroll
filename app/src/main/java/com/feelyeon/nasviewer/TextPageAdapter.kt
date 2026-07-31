@@ -5,6 +5,9 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.view.LayoutInflater
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +22,13 @@ class TextPageAdapter(
     private val typeface: Typeface,
     private val highlights: List<Highlight>,
     private val pageStarts: List<Int>,
+    private val onHighlightSelection: (Int, Int) -> Unit,
     private val onTap: (Float, Float) -> Unit
 ) : RecyclerView.Adapter<TextPageAdapter.PageVH>() {
+
+    companion object {
+        private const val HIGHLIGHT_MENU_ID = 1001
+    }
 
     override fun getItemCount(): Int = pages.size
 
@@ -28,6 +36,25 @@ class TextPageAdapter(
         val text = TextView(parent.context).apply {
             layoutParams = ViewGroup.LayoutParams(-1, -1)
             setTextIsSelectable(true)
+            customSelectionActionModeCallback = object : ActionMode.Callback {
+                override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+                    menu.add(0, HIGHLIGHT_MENU_ID, 0, "하이라이트")
+                    return true
+                }
+
+                override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean = false
+
+                override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                    if (item.itemId != HIGHLIGHT_MENU_ID) return false
+                    val start = selectionStart
+                    val end = selectionEnd
+                    if (start >= 0 && end > start) onHighlightSelection(start, end)
+                    mode.finish()
+                    return true
+                }
+
+                override fun onDestroyActionMode(mode: ActionMode) = Unit
+            }
             gravity = android.view.Gravity.TOP or android.view.Gravity.START
         }
         return PageVH(text)

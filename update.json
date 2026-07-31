@@ -1,6 +1,6 @@
 {
-  "versionCode": 6,
-  "versionName": "1.2.3",
-  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.3/NAScroll-v1.2.3-debug.apk",
-  "releaseNotes": "EPUB/TXT 꾹 눌러 하이라이트 및 독서 노트 삭제 기능 추가"
+  "versionCode": 7,
+  "versionName": "1.2.4",
+  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.4/NAScroll-v1.2.4-debug.apk",
+  "releaseNotes": "TXT 페이지 모드에서도 꾹 눌러 하이라이트 가능"
 }

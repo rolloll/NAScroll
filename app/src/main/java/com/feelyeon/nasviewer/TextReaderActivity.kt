@@ -262,6 +262,10 @@ class TextReaderActivity : AppCompatActivity() {
                 typeface = fontFamilyToTypeface(appearance.fontFamily),
                 highlights = highlights,
                 pageStarts = pageStartsSnapshot,
+                onHighlightSelection = { start, end ->
+                    val page = binding.pagePager.currentItem.coerceIn(pageStartsSnapshot.indices)
+                    saveHighlight(pageStartsSnapshot[page] + start, pageStartsSnapshot[page] + end)
+                },
                 onTap = { xFraction, yFraction ->
                     val action = TapZone.resolve(
                         Prefs.tapZonePaging(this@TextReaderActivity),
@@ -476,7 +480,11 @@ class TextReaderActivity : AppCompatActivity() {
     private fun applyHighlightFromSelection() {
         val start = binding.contentText.selectionStart
         val end = binding.contentText.selectionEnd
-        if (start < 0 || end <= start) return
+        saveHighlight(start, end)
+    }
+
+    private fun saveHighlight(start: Int, end: Int) {
+        if (start < 0 || end <= start || end > fullText.length) return
         val snippet = fullText.substring(start, end).take(40)
         lifecycleScope.launch {
             withContext(Dispatchers.IO) { db.addHighlight(filePath, start, end, snippet) }
