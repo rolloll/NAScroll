@@ -24,7 +24,9 @@ sealed class ReadingNote {
     }
 }
 
-class ReadingNotesAdapter : RecyclerView.Adapter<ReadingNotesAdapter.NoteVH>() {
+class ReadingNotesAdapter(
+    private val onDelete: (ReadingNote) -> Unit
+) : RecyclerView.Adapter<ReadingNotesAdapter.NoteVH>() {
     private val items = mutableListOf<ReadingNote>()
     private val dateFormat = SimpleDateFormat("MM/dd HH:mm", Locale.getDefault())
 
@@ -61,7 +63,8 @@ class ReadingNotesAdapter : RecyclerView.Adapter<ReadingNotesAdapter.NoteVH>() {
     }
 
     override fun onBindViewHolder(holder: NoteVH, position: Int) {
-        when (val item = items[position]) {
+        val item = items[position]
+        when (item) {
             is ReadingNote.BookmarkNote -> {
                 holder.binding.typeText.text = "책갈피  ·  ${dateFormat.format(Date(item.createdAt))}"
                 holder.binding.contentText.text = item.bookmark.label
@@ -73,6 +76,7 @@ class ReadingNotesAdapter : RecyclerView.Adapter<ReadingNotesAdapter.NoteVH>() {
                 holder.binding.pathText.text = item.path.trim('/').ifBlank { "/" }
             }
         }
+        holder.binding.deleteBtn.setOnClickListener { onDelete(item) }
     }
 
     class NoteVH(val binding: ItemReadingNoteBinding) : RecyclerView.ViewHolder(binding.root)

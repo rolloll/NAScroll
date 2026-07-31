@@ -1,6 +1,6 @@
 {
-  "versionCode": 5,
-  "versionName": "1.2.2",
-  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.2/NAScroll-v1.2.2-debug.apk",
-  "releaseNotes": "업데이트 알림 안정화 및 설정에서 수동 업데이트 확인 추가"
+  "versionCode": 6,
+  "versionName": "1.2.3",
+  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.3/NAScroll-v1.2.3-debug.apk",
+  "releaseNotes": "EPUB/TXT 꾹 눌러 하이라이트 및 독서 노트 삭제 기능 추가"
 }

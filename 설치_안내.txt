@@ -1,11 +1,11 @@
-NAScroll 1.2.2 - 설치 및 사용 안내
+NAScroll 1.2.3 - 설치 및 사용 안내
 ===================================
 
 NAScroll은 Synology NAS의 DSM File Station에 직접 연결하여 이미지 폴더, EPUB, TXT,
 PDF 파일을 읽는 Android 앱입니다.
 
 지원 Android 버전: Android 7.0(API 24) 이상
-앱 버전: 1.2.2 (versionCode 5)
+앱 버전: 1.2.3 (versionCode 6)
 
 
 [1단계] APK 준비

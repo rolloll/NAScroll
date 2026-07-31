@@ -108,7 +108,8 @@ class EpubReaderActivity : AppCompatActivity() {
         binding.viewerSettingBtn.setOnClickListener {
             ReaderAppearanceSettings.showTouchSettings(this) { applyReaderAppearance() }
         }
-        binding.highlightBtn.setOnClickListener { highlightCurrentSelection() }
+        binding.highlightApplyBtn.setOnClickListener { highlightCurrentSelection() }
+        binding.highlightBtn.setOnClickListener { showHighlightsDialog() }
         binding.prevChBtn.setOnClickListener { goChapter(currentIndex - 1) }
         binding.nextChBtn.setOnClickListener { goChapter(currentIndex + 1) }
         binding.tocBtn.setOnClickListener { openToc() }
@@ -944,6 +945,45 @@ class EpubReaderActivity : AppCompatActivity() {
                 .setTitle("독서노트")
                 .setItems(labels.toTypedArray()) { _, index ->
                     if (index == 0) addBookmarkAtCurrentPosition() else notes[index - 1].jump()
+                }
+                .setNegativeButton("닫기", null)
+                .show()
+        }
+    }
+
+    private fun showHighlightsDialog() {
+        val chapters = book?.chapters ?: return
+        val dateFmt = SimpleDateFormat("MM/dd HH:mm", Locale.getDefault())
+        lifecycleScope.launch {
+            val highlights = withContext(Dispatchers.IO) {
+                db.highlightsForBookPrefix(filePath)
+            }
+            if (highlights.isEmpty()) {
+                AlertDialog.Builder(this@EpubReaderActivity)
+                    .setTitle("하이라이트")
+                    .setMessage("이 파일에 저장된 하이라이트가 없습니다.\n텍스트를 길게 눌러 선택한 뒤 하이라이트를 추가하세요.")
+                    .setPositiveButton("확인", null)
+                    .show()
+                return@launch
+            }
+            val notes = highlights.mapNotNull { highlight ->
+                val chapterIndex = chapters.indexOfFirst {
+                    "$filePath#${it.relativePath}" == highlight.filePath
+                }
+                if (chapterIndex < 0) null else {
+                    val chapterTitle = chapters[chapterIndex].title
+                    "${highlight.snippet}\n$chapterTitle · ${dateFmt.format(highlight.createdAt)}" to chapterIndex
+                }
+            }
+            AlertDialog.Builder(this@EpubReaderActivity)
+                .setTitle("하이라이트 (${notes.size})")
+                .setItems(notes.map { it.first }.toTypedArray()) { _, which ->
+                    val chapterIndex = notes[which].second
+                    saveCurrentProgress {
+                        currentIndex = chapterIndex
+                        pendingScrollFraction = 0.0
+                        openChapter(currentIndex)
+                    }
                 }
                 .setNegativeButton("닫기", null)
                 .show()

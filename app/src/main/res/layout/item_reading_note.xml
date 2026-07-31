@@ -6,7 +6,10 @@
     android:background="@color/panel"
     android:padding="14dp"
     android:layout_marginBottom="8dp">
-    <TextView android:id="@+id/typeText" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/accent2" android:textSize="12sp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+        <TextView android:id="@+id/typeText" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/accent2" android:textSize="12sp" />
+        <ImageButton android:id="@+id/deleteBtn" android:layout_width="40dp" android:layout_height="40dp" android:contentDescription="삭제" android:src="@android:drawable/ic_menu_delete" android:tint="@color/text_muted" android:background="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
     <TextView android:id="@+id/contentText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="@color/text_primary" android:textSize="16sp" android:maxLines="3" android:ellipsize="end" />
     <TextView android:id="@+id/pathText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="@color/text_muted" android:textSize="12sp" android:maxLines="1" android:ellipsize="middle" />
 </LinearLayout>

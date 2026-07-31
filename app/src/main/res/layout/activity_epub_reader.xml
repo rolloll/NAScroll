@@ -63,12 +63,27 @@
             android:ellipsize="end" />
 
         <TextView
+            android:id="@+id/highlightApplyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="🖍"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:contentDescription="선택한 텍스트 하이라이트"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <TextView
             android:id="@+id/highlightBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="✏"
+            android:text="☷"
             android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:contentDescription="하이라이트 목록"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless" />
