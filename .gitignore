@@ -10,6 +10,7 @@
 # Gradle
 /.gradle/
 .gradle/
+.gradle-user/
 
 # Local machine config (SDK path is machine-specific)
 local.properties

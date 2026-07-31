@@ -1,5 +1,18 @@
 # Changelog
 
+# 1.2.0 - 2026-07-31
+
+### Added
+
+- GitHub update check once per day when the app starts
+- Update dialog with a direct APK download link and release notes
+- `update.json` release metadata for automated version comparison
+
+### Notes
+
+- The update check is best-effort and does not block offline use or NAS access.
+- The version bump is `versionCode 3`, `versionName 1.2.0`.
+
 ## 1.1.0 - 2026-07-31
 
 ### Added

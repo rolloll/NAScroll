@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private var updateCheckStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,17 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginBtn.setOnClickListener { attemptLogin() }
+        checkForUpdates()
+    }
+
+    private fun checkForUpdates() {
+        if (updateCheckStarted) return
+        updateCheckStarted = true
+        lifecycleScope.launch {
+            UpdateChecker.checkIfNeeded(this@LoginActivity)?.let { update ->
+                if (!isFinishing && !isDestroyed) UpdateChecker.showUpdateDialog(this@LoginActivity, update)
+            }
+        }
     }
 
     private fun attemptAutoLogin() {

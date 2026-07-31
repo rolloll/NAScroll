@@ -2,7 +2,7 @@
 
 NAScroll is a personal Android reader for files stored on Synology DSM File Station. It connects directly to the NAS and supports image folders, EPUB, TXT, and PDF files.
 
-**Current version:** `1.1.0` (`versionCode 2`)
+**Current version:** `1.2.0` (`versionCode 3`)
 
 > This project is currently maintained as a personal-use application. It is not an official Synology product and has not been tested against every DSM, Android, or EPUB combination.
 
@@ -35,16 +35,24 @@ NAScroll is a personal Android reader for files stored on Synology DSM File Stat
 
 ## Installation
 
-1. Download the included debug APK from [`releases/NAScroll-v1.1.0-debug.apk`](releases/NAScroll-v1.1.0-debug.apk), or build one locally as described below.
+1. Download the current APK from [`releases/NAScroll-v1.2.0-debug.apk`](releases/NAScroll-v1.2.0-debug.apk), or build one locally as described below.
 2. Install the APK on an Android 7.0+ device. Sideloading may require enabling installation from the file manager used to open the APK.
 3. Enter the NAS base URL, DSM account, and password on the login screen.
 4. Browse to a file and select it to open the appropriate reader.
 
-The included APK is a debug build signed with a development key for local sideloading. It is
-not suitable for publishing through Google Play or as a production update to an APK signed with
-a different key.
-
 The NAS URL must start with `http://` or `https://`. HTTPS is strongly recommended when the NAS is accessed outside a trusted local network.
+
+## App updates
+
+When the app starts, it checks GitHub at most once per day for `update.json`. If its `versionCode`
+is newer than the installed app, a dialog opens with a button that launches the APK download URL.
+Network failures are ignored so offline reading and NAS access are not interrupted.
+
+To publish an update, increment `versionCode` and `versionName` in `app/build.gradle.kts`, build the
+APK, upload it to the repository, and update `update.json` on the default branch. Keep the JSON
+`versionCode` equal to the APK's Android version code and set `apkUrl` to the public GitHub download
+URL. The APK must be signed with the same key as the installed app for an in-place Android update;
+the included debug APK is intended for local sideloading only.
 
 ## Reader usage
 
