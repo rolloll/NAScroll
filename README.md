@@ -1,6 +1,14 @@
 # NAScroll
 
-NAScroll is a personal Android reader for files stored on Synology DSM File Station. It connects directly to the NAS and supports image folders, EPUB, TXT, and PDF files.
+## About NAScroll
+
+NAScroll is a read-only Android viewer designed for securely browsing digital content stored on a Synology NAS.
+
+It provides reader-focused viewing for web novels, webtoons, and business documents, including TXT, EPUB, JPG, PNG, and PDF files. Content is streamed directly from the NAS. The app does not provide user-facing permanent downloads, sharing, editing, or deletion of NAS content; temporary cache files may be created by Android to support reading and are removed by the system or when the app cache is cleared.
+
+NAScroll is intended for private, non-commercial use, especially by digital content professionals who need a convenient way to review internal files on mobile devices.
+
+The app is not an official Synology product.
 
 **Current version:** `1.2.0` (`versionCode 3`)
 
@@ -10,13 +18,13 @@ NAScroll is a personal Android reader for files stored on Synology DSM File Stat
 
 - Sign in to a Synology NAS using the DSM File Station API
 - Browse shared folders and nested directories with natural sorting
-- Read image folders, EPUB, TXT, and PDF files
+- Read web novels, webtoons, and business documents in image folders (JPG/PNG), EPUB, TXT, and PDF formats
 - EPUB table of contents, chapter navigation, reflowed page turns, bookmarks, highlights, and reading-position restore
 - Reader appearance controls for theme, font, size, margins, line spacing, alignment, brightness, and tap zones
 - TXT paged or continuous reading modes
 - PDF page navigation or continuous scrolling
 - Local reading notes, bookmarks, highlights, and progress
-- On-device caching of downloaded EPUB/PDF/TXT content for smoother reading
+- Temporary on-device caching for smoother reading; no user-facing permanent download workflow
 
 ## Requirements
 
@@ -35,7 +43,7 @@ NAScroll is a personal Android reader for files stored on Synology DSM File Stat
 
 ## Installation
 
-1. Download the current APK from [`releases/NAScroll-v1.2.0-debug.apk`](releases/NAScroll-v1.2.0-debug.apk), or build one locally as described below.
+1. Download the current APK from the [NAScroll 1.2.0 GitHub Release](https://github.com/rolloll/NAScroll/releases/tag/v1.2.0), or build one locally as described below.
 2. Install the APK on an Android 7.0+ device. Sideloading may require enabling installation from the file manager used to open the APK.
 3. Enter the NAS base URL, DSM account, and password on the login screen.
 4. Browse to a file and select it to open the appropriate reader.
@@ -127,8 +135,8 @@ app/src/main/res/         Layouts, themes, icons, and reader resources
 - NAS credentials are stored in plain Android `SharedPreferences` so the app can keep the user signed in. This is a deliberate personal-use trade-off, not secure credential storage for a shared or rooted device.
 - Use a dedicated DSM account with the minimum read permissions required. Do not use a DSM administrator account unless necessary.
 - Prefer HTTPS with a certificate trusted by the device. Do not expose DSM directly to the public internet without appropriate firewall, VPN, and account controls.
-- The app uses the NAS for read-only File Station operations (login, list, thumbnail, and download). Bookmarks, highlights, and reading progress stay in the app's local SQLite database and are not written back to the NAS.
-- Downloaded reader content may remain in the app cache until Android removes it or the app is cleared. Treat the device cache as sensitive if the books are sensitive.
+- The app uses the NAS for read-only File Station operations (login, list, thumbnail, and stream/download-to-cache). Bookmarks, highlights, and reading progress stay in the app's local SQLite database and are not written back to the NAS.
+- Temporary reader cache files may remain on the device until Android removes them or the app cache is cleared. Treat the device cache as sensitive if the content is sensitive.
 - Two-factor authentication flows and DRM-protected content are not supported by this release.
 
 ## Known limitations
