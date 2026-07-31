@@ -1,6 +1,6 @@
 {
-  "versionCode": 3,
-  "versionName": "1.2.0",
-  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.0/NAScroll-v1.2.0-debug.apk",
-  "releaseNotes": "GitHub 최신 버전 확인 및 APK 다운로드 알림 추가"
+  "versionCode": 4,
+  "versionName": "1.2.1",
+  "apkUrl": "https://github.com/rolloll/NAScroll/releases/download/v1.2.1/NAScroll-v1.2.1-debug.apk",
+  "releaseNotes": "스크롤 선택 기능 추가 및 뷰어 설정 글자 가독성 개선"
 }

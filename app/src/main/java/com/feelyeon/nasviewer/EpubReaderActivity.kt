@@ -105,7 +105,9 @@ class EpubReaderActivity : AppCompatActivity() {
                 onZoomChange = { value -> adjustZoom(value - Prefs.epubTextZoomPct(this)) }
             ) { applyReaderAppearance() }
         }
-        binding.viewerSettingBtn.setOnClickListener { ReaderAppearanceSettings.showTouchSettings(this) {} }
+        binding.viewerSettingBtn.setOnClickListener {
+            ReaderAppearanceSettings.showTouchSettings(this) { applyReaderAppearance() }
+        }
         binding.highlightBtn.setOnClickListener { highlightCurrentSelection() }
         binding.prevChBtn.setOnClickListener { goChapter(currentIndex - 1) }
         binding.nextChBtn.setOnClickListener { goChapter(currentIndex + 1) }
@@ -171,6 +173,7 @@ class EpubReaderActivity : AppCompatActivity() {
             isAppearanceLightNavigationBars = lightSystemBars
         }
         val alignment = if (appearance.justify) "justify" else "left"
+        val scrollEnabled = !Prefs.tapZonePaging(this)
         val highlightColor = if (appearance.highlightsVisible) "#5BA4FF" else "transparent"
         // Many of these EPUBs (this book included — verified against its extracted chapter
         // XHTML) write paragraph breaks as the author's own blank line, i.e. a spacer
@@ -209,7 +212,7 @@ class EpubReaderActivity : AppCompatActivity() {
         // wouldn't track it. zeroing the default html/body margin (which some EPUB
         // stylesheets adjust in ways that only show up on some devices) keeps this exact.
         val verticalMargin = margin * 2
-        val css = "html,body{background:${appearance.backgroundColor} !important;color:${appearance.textColor} !important;margin:0 !important;padding:${verticalMargin}px ${margin}px !important;line-height:calc(1.45em + ${spacing}px) !important;text-align:$alignment !important;font-family:${appearance.fontFamily} !important;}body *{color:inherit !important;font-family:inherit !important;line-height:calc(1.45em + ${spacing}px) !important;text-align:$alignment !important;}img{max-width:100% !important;height:auto !important;}p{margin:0 0 ${appearance.paragraphSpacingDp}px 0 !important;}p:empty,p:has(>br:only-child){margin:0 !important;}.nascope-hl{background-color:$highlightColor !important;}"
+        val css = "html,body{background:${appearance.backgroundColor} !important;color:${appearance.textColor} !important;margin:0 !important;padding:${verticalMargin}px ${margin}px !important;line-height:calc(1.45em + ${spacing}px) !important;text-align:$alignment !important;font-family:${appearance.fontFamily} !important;touch-action:${if (scrollEnabled) "auto" else "none"} !important;}body *{color:inherit !important;font-family:inherit !important;line-height:calc(1.45em + ${spacing}px) !important;text-align:$alignment !important;}img{max-width:100% !important;height:auto !important;}p{margin:0 0 ${appearance.paragraphSpacingDp}px 0 !important;}p:empty,p:has(>br:only-child){margin:0 !important;}.nascope-hl{background-color:$highlightColor !important;}"
         val script = """
             (function(){
                 var s = document.getElementById('nascope-reader-style');
@@ -236,6 +239,7 @@ class EpubReaderActivity : AppCompatActivity() {
                 // again (font/margin/spacing/zoom/rotation), or __nascopeInvalidateLineBoxes()
                 // called explicitly after a native-side change the WebView itself can't signal
                 // (textZoom, set outside this script). Scrolling alone never invalidates it.
+                window.__nascopeScrollEnabled = ${if (scrollEnabled) "true" else "false"};
                 window.__nascopeInvalidateLineBoxes = function() {
                     window.__nascopeLineBoxesCache = null;
                 };
@@ -372,6 +376,14 @@ class EpubReaderActivity : AppCompatActivity() {
                     // can change width too — invalidate defensively so a width change that
                     // reflows text can't leave stale line boxes behind.
                     window.addEventListener('resize', function(){ window.__nascopeInvalidateLineBoxes(); applyBoth(); });
+                }
+                if (!window.__nascopeScrollGuardAdded) {
+                    window.__nascopeScrollGuardAdded = true;
+                    var guardScroll = function(e) {
+                        if (!window.__nascopeScrollEnabled) e.preventDefault();
+                    };
+                    document.addEventListener('touchmove', guardScroll, {passive: false});
+                    document.addEventListener('wheel', guardScroll, {passive: false});
                 }
                 window.__nascopeApplyTopMask();
                 window.__nascopeApplyBottomMask();
@@ -517,7 +529,12 @@ class EpubReaderActivity : AppCompatActivity() {
         })
         binding.webView.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
-            false
+            // Page-edge modes use taps for navigation, so consume drag movement before
+            // WebView can turn it into a native scroll. The explicit Scroll mode leaves
+            // every gesture available to WebView for normal continuous reading.
+            Prefs.tapZonePaging(this@EpubReaderActivity) &&
+                (event.actionMasked == MotionEvent.ACTION_MOVE ||
+                    event.actionMasked == MotionEvent.ACTION_CANCEL)
         }
     }
 

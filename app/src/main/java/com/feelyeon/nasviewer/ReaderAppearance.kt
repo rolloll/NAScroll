@@ -88,6 +88,7 @@ object ReaderAppearanceSettings {
         val dialog = BottomSheetDialog(context)
         val view = LayoutInflater.from(context).inflate(R.layout.sheet_reader_appearance, null)
         dialog.setContentView(view)
+        applySheetTextColors(view)
 
         setupThemeSwatches(context, view, onChanged)
         setupBrightness(context, view)
@@ -200,6 +201,26 @@ object ReaderAppearanceSettings {
         refreshSelection()
     }
 
+    private fun applySheetTextColors(root: View) {
+        val primary = root.context.getColor(R.color.sheet_text_primary)
+        val muted = root.context.getColor(R.color.sheet_text_muted)
+        fun visit(view: View) {
+            if (view is TextView) {
+                view.setTextColor(if (view.id == R.id.fontValueText ||
+                    view.id == R.id.alignValueText ||
+                    view.id == R.id.readingModeValueText ||
+                    view.id == R.id.lineSpacingValueText ||
+                    view.id == R.id.paragraphSpacingValueText ||
+                    view.id == R.id.marginValueText
+                ) muted else primary)
+            }
+            if (view is android.view.ViewGroup) {
+                for (index in 0 until view.childCount) visit(view.getChildAt(index))
+            }
+        }
+        visit(root)
+    }
+
     private fun setupBrightness(context: Context, root: View) {
         val activity = context as? Activity
         val seekBar = root.findViewById<SeekBar>(R.id.brightnessSeekBar)
@@ -297,7 +318,7 @@ object ReaderAppearanceSettings {
             context,
             "뷰어 설정",
             listOf(
-                "탭으로 페이지 넘기기 사용 안 함",
+                "스크롤",
                 "좌/우 터치 영역으로 이전/다음 페이지 이동",
                 "상/하 터치 영역으로 이전/다음 페이지 이동"
             ),
@@ -364,7 +385,10 @@ object ReaderAppearanceSettings {
         items.forEachIndexed { index, label ->
             val row = LayoutInflater.from(context).inflate(R.layout.sheet_settings_radio_item, container, false)
             val radio = row.findViewById<RadioButton>(R.id.itemRadio)
-            row.findViewById<TextView>(R.id.itemText).text = label
+            row.findViewById<TextView>(R.id.itemText).apply {
+                text = label
+                setTextColor(context.getColor(R.color.sheet_text_primary))
+            }
             radio.isChecked = index == checked
             radios += radio
             row.setOnClickListener {

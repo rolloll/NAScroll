@@ -96,7 +96,15 @@ class TextReaderActivity : AppCompatActivity() {
                 showReadingMode = true
             ) { applyReaderAppearance(); configureReadingMode() }
         }
-        binding.viewerSettingBtn.setOnClickListener { ReaderAppearanceSettings.showTouchSettings(this) {} }
+        binding.viewerSettingBtn.setOnClickListener {
+            ReaderAppearanceSettings.showTouchSettings(this) {
+                // The viewer setting is the navigation choice for TXT as well: scroll keeps
+                // the continuous ScrollView, while either page-edge option uses fixed pages.
+                Prefs.setTextPagedMode(this, Prefs.tapZonePaging(this))
+                applyReaderAppearance()
+                configureReadingMode()
+            }
+        }
         binding.contentText.textSize = Prefs.textFontSizeSp(this).toFloat()
         binding.fontDownBtn.setOnClickListener { adjustFontSize(-2) }
         binding.fontUpBtn.setOnClickListener { adjustFontSize(2) }

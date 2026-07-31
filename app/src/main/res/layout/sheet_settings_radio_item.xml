@@ -25,6 +25,6 @@
         android:layout_weight="1"
         android:layout_marginStart="12dp"
         android:textSize="16sp"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="@color/sheet_text_primary" />
 
 </LinearLayout>
