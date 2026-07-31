@@ -31,10 +31,14 @@ object UpdateChecker {
         .callTimeout(12, TimeUnit.SECONDS)
         .build()
 
-    suspend fun checkIfNeeded(context: Context): AppUpdate? = withContext(Dispatchers.IO) {
+    suspend fun checkIfNeeded(context: Context): AppUpdate? = check(context, force = false)
+
+    suspend fun checkNow(context: Context): AppUpdate? = check(context, force = true)
+
+    private suspend fun check(context: Context, force: Boolean): AppUpdate? = withContext(Dispatchers.IO) {
         val prefs = context.getSharedPreferences("nasviewer_prefs", Context.MODE_PRIVATE)
         val now = System.currentTimeMillis()
-        if (now - prefs.getLong(KEY_LAST_CHECK_AT, 0L) < CHECK_INTERVAL_MS) return@withContext null
+        if (!force && now - prefs.getLong(KEY_LAST_CHECK_AT, 0L) < CHECK_INTERVAL_MS) return@withContext null
         prefs.edit().putLong(KEY_LAST_CHECK_AT, now).apply()
 
         val request = Request.Builder()
@@ -57,8 +61,13 @@ object UpdateChecker {
 
         val currentCode = currentVersionCode(context)
         if (update == null || update.versionCode <= currentCode) return@withContext null
-        if (prefs.getInt(KEY_LAST_NOTIFIED_CODE, 0) >= update.versionCode) return@withContext null
-        prefs.edit().putInt(KEY_LAST_NOTIFIED_CODE, update.versionCode).apply()
+        // A previous LoginActivity could finish while the network request was returning. Older
+        // builds recorded the notification code before the dialog was actually shown, so treat a
+        // marker newer than the installed app as unshown and allow the BrowserActivity check to
+        // recover it once.
+        val lastNotified = prefs.getInt(KEY_LAST_NOTIFIED_CODE, 0)
+        if (!force && lastNotified >= update.versionCode && lastNotified <= currentCode) return@withContext null
+        if (!force) prefs.edit().putInt(KEY_LAST_NOTIFIED_CODE, update.versionCode).apply()
         update
     }
 

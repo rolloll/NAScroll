@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.feelyeon.nasviewer.databinding.ActivitySettingsBinding
+import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
@@ -29,6 +31,20 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
         })
         binding.backBtn.setOnClickListener { finish() }
+        binding.updateBtn.setOnClickListener {
+            binding.updateBtn.isEnabled = false
+            binding.updateBtn.text = "확인 중..."
+            lifecycleScope.launch {
+                val update = UpdateChecker.checkNow(this@SettingsActivity)
+                binding.updateBtn.isEnabled = true
+                binding.updateBtn.text = "업데이트 확인"
+                if (update != null) {
+                    UpdateChecker.showUpdateDialog(this@SettingsActivity, update)
+                } else {
+                    android.widget.Toast.makeText(this@SettingsActivity, "현재 최신 버전입니다.", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         binding.logoutBtn.setOnClickListener {
             Prefs.clear(this)
             SynologyApi.logout()

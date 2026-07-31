@@ -10,7 +10,7 @@ NAScroll is intended for private, non-commercial use, especially by digital cont
 
 The app is not an official Synology product.
 
-**Current version:** `1.2.1` (`versionCode 4`)
+**Current version:** `1.2.2` (`versionCode 5`)
 
 > This project is currently maintained as a personal-use application. It is not an official Synology product and has not been tested against every DSM, Android, or EPUB combination.
 
@@ -43,7 +43,7 @@ The app is not an official Synology product.
 
 ## Installation
 
-1. Download the current APK from the [NAScroll 1.2.1 GitHub Release](https://github.com/rolloll/NAScroll/releases/tag/v1.2.1), or build one locally as described below.
+1. Download the current APK from the [NAScroll 1.2.2 GitHub Release](https://github.com/rolloll/NAScroll/releases/tag/v1.2.2), or build one locally as described below.
 2. Install the APK on an Android 7.0+ device. Sideloading may require enabling installation from the file manager used to open the APK.
 3. Enter the NAS base URL, DSM account, and password on the login screen.
 4. Browse to a file and select it to open the appropriate reader.

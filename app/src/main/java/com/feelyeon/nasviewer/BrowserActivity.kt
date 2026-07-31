@@ -24,6 +24,7 @@ class BrowserActivity : AppCompatActivity() {
     private var currentPath: String = "/"
     private var currentItems: List<FileItem> = emptyList()
     private var loadJob: Job? = null
+    private var updateCheckJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,17 @@ class BrowserActivity : AppCompatActivity() {
         if (!Prefs.hasAccount(this)) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
+            return
+        }
+        checkForUpdates()
+    }
+
+    private fun checkForUpdates() {
+        if (updateCheckJob?.isActive == true) return
+        updateCheckJob = lifecycleScope.launch {
+            UpdateChecker.checkIfNeeded(this@BrowserActivity)?.let { update ->
+                if (!isFinishing && !isDestroyed) UpdateChecker.showUpdateDialog(this@BrowserActivity, update)
+            }
         }
     }
 
